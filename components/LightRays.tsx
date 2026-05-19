@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { Renderer, Program, Triangle, Mesh } from "ogl";
+import {useRef, useEffect, useState} from "react";
+import {Renderer, Program, Triangle, Mesh} from "ogl";
 
 export type RaysOrigin =
     | "top-center"
@@ -51,23 +51,23 @@ const getAnchorAndDir = (
     const outside = 0.2;
     switch (origin) {
         case "top-left":
-            return { anchor: [0, -outside * h], dir: [0, 1] };
+            return {anchor: [0, -outside * h], dir: [0, 1]};
         case "top-right":
-            return { anchor: [w, -outside * h], dir: [0, 1] };
+            return {anchor: [w, -outside * h], dir: [0, 1]};
         case "top-center-offset":
-            return { anchor: [0.5 * w + 0.2 * w, -outside * h], dir: [-0.2, 1] };
+            return {anchor: [0.5 * w + 0.2 * w, -outside * h], dir: [-0.2, 1]};
         case "left":
-            return { anchor: [-outside * w, 0.5 * h], dir: [1, 0] };
+            return {anchor: [-outside * w, 0.5 * h], dir: [1, 0]};
         case "right":
-            return { anchor: [(1 + outside) * w, 0.5 * h], dir: [-1, 0] };
+            return {anchor: [(1 + outside) * w, 0.5 * h], dir: [-1, 0]};
         case "bottom-left":
-            return { anchor: [0, (1 + outside) * h], dir: [0, -1] };
+            return {anchor: [0, (1 + outside) * h], dir: [0, -1]};
         case "bottom-center":
-            return { anchor: [0.5 * w, (1 + outside) * h], dir: [0, -1] };
+            return {anchor: [0.5 * w, (1 + outside) * h], dir: [0, -1]};
         case "bottom-right":
-            return { anchor: [w, (1 + outside) * h], dir: [0, -1] };
+            return {anchor: [w, (1 + outside) * h], dir: [0, -1]};
         default: // "top-center"
-            return { anchor: [0.5 * w, -outside * h], dir: [0, 1] };
+            return {anchor: [0.5 * w, -outside * h], dir: [0, 1]};
     }
 };
 
@@ -89,8 +89,8 @@ const LightRays: React.FC<LightRaysProps> = ({
     const containerRef = useRef<HTMLDivElement>(null);
     const uniformsRef = useRef<any>(null);
     const rendererRef = useRef<Renderer | null>(null);
-    const mouseRef = useRef({ x: 0.5, y: 0.5 });
-    const smoothMouseRef = useRef({ x: 0.5, y: 0.5 });
+    const mouseRef = useRef({x: 0.5, y: 0.5});
+    const smoothMouseRef = useRef({x: 0.5, y: 0.5});
     const animationIdRef = useRef<number | null>(null);
     const meshRef = useRef<any>(null);
     const cleanupFunctionRef = useRef<(() => void) | null>(null);
@@ -105,7 +105,7 @@ const LightRays: React.FC<LightRaysProps> = ({
                 const entry = entries[0];
                 setIsVisible(entry.isIntersecting);
             },
-            { threshold: 0.1 }
+            {threshold: 0.1}
         );
 
         observerRef.current.observe(containerRef.current);
@@ -251,23 +251,23 @@ void main() {
 }`;
 
             const uniforms = {
-                iTime: { value: 0 },
-                iResolution: { value: [1, 1] },
+                iTime: {value: 0},
+                iResolution: {value: [1, 1]},
 
-                rayPos: { value: [0, 0] },
-                rayDir: { value: [0, 1] },
+                rayPos: {value: [0, 0]},
+                rayDir: {value: [0, 1]},
 
-                raysColor: { value: hexToRgb(raysColor) },
-                raysSpeed: { value: raysSpeed },
-                lightSpread: { value: lightSpread },
-                rayLength: { value: rayLength },
-                pulsating: { value: pulsating ? 1.0 : 0.0 },
-                fadeDistance: { value: fadeDistance },
-                saturation: { value: saturation },
-                mousePos: { value: [0.5, 0.5] },
-                mouseInfluence: { value: mouseInfluence },
-                noiseAmount: { value: noiseAmount },
-                distortion: { value: distortion },
+                raysColor: {value: hexToRgb(raysColor)},
+                raysSpeed: {value: raysSpeed},
+                lightSpread: {value: lightSpread},
+                rayLength: {value: rayLength},
+                pulsating: {value: pulsating ? 1.0 : 0.0},
+                fadeDistance: {value: fadeDistance},
+                saturation: {value: saturation},
+                mousePos: {value: [0.5, 0.5]},
+                mouseInfluence: {value: mouseInfluence},
+                noiseAmount: {value: noiseAmount},
+                distortion: {value: distortion},
             };
             uniformsRef.current = uniforms;
 
@@ -277,7 +277,7 @@ void main() {
                 fragment: frag,
                 uniforms,
             });
-            const mesh = new Mesh(gl, { geometry, program });
+            const mesh = new Mesh(gl, {geometry, program});
             meshRef.current = mesh;
 
             const updatePlacement = () => {
@@ -285,7 +285,7 @@ void main() {
 
                 renderer.dpr = Math.min(window.devicePixelRatio, 2);
 
-                const { clientWidth: wCSS, clientHeight: hCSS } = containerRef.current;
+                const {clientWidth: wCSS, clientHeight: hCSS} = containerRef.current;
                 renderer.setSize(wCSS, hCSS);
 
                 const dpr = renderer.dpr;
@@ -294,7 +294,7 @@ void main() {
 
                 uniforms.iResolution.value = [w, h];
 
-                const { anchor, dir } = getAnchorAndDir(raysOrigin, w, h);
+                const {anchor, dir} = getAnchorAndDir(raysOrigin, w, h);
                 uniforms.rayPos.value = anchor;
                 uniforms.rayDir.value = dir;
             };
@@ -323,7 +323,7 @@ void main() {
                 }
 
                 try {
-                    renderer.render({ scene: mesh });
+                    renderer.render({scene: mesh});
                     animationIdRef.current = requestAnimationFrame(loop);
                 } catch (error) {
                     console.warn("WebGL rendering error:", error);
@@ -408,9 +408,9 @@ void main() {
         u.noiseAmount.value = noiseAmount;
         u.distortion.value = distortion;
 
-        const { clientWidth: wCSS, clientHeight: hCSS } = containerRef.current;
+        const {clientWidth: wCSS, clientHeight: hCSS} = containerRef.current;
         const dpr = renderer.dpr;
-        const { anchor, dir } = getAnchorAndDir(raysOrigin, wCSS * dpr, hCSS * dpr);
+        const {anchor, dir} = getAnchorAndDir(raysOrigin, wCSS * dpr, hCSS * dpr);
         u.rayPos.value = anchor;
         u.rayDir.value = dir;
     }, [
@@ -433,7 +433,7 @@ void main() {
             const rect = containerRef.current.getBoundingClientRect();
             const x = (e.clientX - rect.left) / rect.width;
             const y = (e.clientY - rect.top) / rect.height;
-            mouseRef.current = { x, y };
+            mouseRef.current = {x, y};
         };
 
         if (followMouse) {
