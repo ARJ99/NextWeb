@@ -1,11 +1,11 @@
-import type {Metadata} from "next";
-import {Schibsted_Grotesk, Martian_Mono, Inter} from "next/font/google";
+import type { Metadata } from "next";
+import { Schibsted_Grotesk, Martian_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
 import LightRays from "@/components/LightRays";
 import Navbar from "@/components/Navbar";
 
-const inter = Inter({subsets: ['latin'], variable: '--font-sans'});
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 const schibstedGrotesk = Schibsted_Grotesk({
     variable: "--font-schibsted-grotesk",
@@ -23,16 +23,17 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+    children,
+}: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
         <html
             lang="en"
+            suppressHydrationWarning
         >
-            <body className={`${schibstedGrotesk.variable, martianMono.variable} min-h-screen", "antialiased`}>
-                <Navbar/>
+            <body className={`${inter.variable} ${schibstedGrotesk.variable} ${martianMono.variable} min-h-screen antialiased`}>
+                <Navbar />
                 <div className="absolute inset-0 top-0 z-[-1] min-h-screen">
                     <LightRays
                         raysOrigin="top-center-offset"
@@ -45,9 +46,9 @@ export default function RootLayout({
                         noiseAmount={0}
                         distortion={0.01}
                         className="custom-rays"
-                        // pulsating={false}
-                        // fadeDistance={1}
-                        // saturation={1}
+                    // pulsating={false}
+                    // fadeDistance={1}
+                    // saturation={1}
                     />
                 </div>
                 <main>
